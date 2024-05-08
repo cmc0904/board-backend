@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.boardbackend.repository.board.board.BoardRepository">
+
+     <insert id="insertBoard" useGeneratedKeys="true" keyProperty="idx">
+            INSERT INTO stn_boards (title, article, writer, password, email, isNotice, isPrivate)
+            VALUES (#{title}, #{article}, #{writer}, #{password}, #{email}, #{isNotice}, #{isPrivate})
+    </insert>
+
+    <insert id="insertFileName">
+        INSERT INTO stn_files (boardIdx, fileName)
+        VALUES (#{boardIdx}, #{fileName})
+    </insert>
+
+    <select id="getBoards">
+        SELECT
+            board.idx AS boardIdx,
+            board.title AS boardTitle,
+            board.article AS boardArticle,
+            (SELECT count(fileName) from stn_files where boardIdx = board.idx) as fileCount,
+            board.writer AS writer,
+            board.createAt,
+            board.isNotice AS isNotice,
+            board.isPrivate AS isPrivate,
+            IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
+            0 AS commentCount,
+            0 AS boardView
+        FROM stn_boards board
+        ORDER BY board.isNotice DESC, board.createAt DESC;
+
+    </select>
+
+
+    <select id="getNotice">
+        SELECT
+            board.idx AS boardIdx,
+            board.title AS boardTitle,
+            board.article AS boardArticle,
+            (SELECT count(fileName) from stn_files where boardIdx = board.idx) as fileCount,
+            board.writer AS writer,
+            board.createAt,
+            board.isNotice AS isNotice,
+            board.isPrivate AS isPrivate,
+            IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
+            0 AS commentCount,
+            0 AS boardView
+        FROM stn_boards board
+        ORDER BY board.isNotice DESC, board.createAt DESC;
+
+    </select>
+
+</mapper>
