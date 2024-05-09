@@ -13,6 +13,7 @@ public class BoardVO {
     private Integer boardIdx;
     private String boardTitle;
     private String boardArticle;
+    private String boardWriterEmail;
     private Integer fileCount;
     private String writer;
     private LocalDateTime createAt;

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.boardbackend.repository.board.comment.CommentRepository">
+
+    <insert id="insertComment">
+        INSERT INTO
+            stn_comments (
+                        boardIdx
+                       , content
+                       , password
+                        , createAt
+        )
+        VALUES (
+                #{boardIdx}
+               , #{content}
+               , #{password}
+                , now()
+       )
+    </insert>
+
+    <select id="getCommentsByBoardIdx">
+        select
+            idx as idx
+            , boardIdx as boardIdx
+            , content as content
+            , DATE_FORMAT(createAt, '%Y-%m-%d %H:%i') as createAt
+        from
+            stn_comments
+        where
+            boardIdx = #{boardIdx}
+        order by
+            createAt desc
+    </select>
+
+</mapper>

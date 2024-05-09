@@ -1,7 +1,8 @@
 package com.example.boardbackend.controller;
 
 import com.example.boardbackend.dto.BoardDTO;
-import com.example.boardbackend.service.BoardService;
+import com.example.boardbackend.service.board.BoardService;
+import com.example.boardbackend.vo.board.BoardData;
 import com.example.boardbackend.vo.board.BoardVO;
 import com.example.boardbackend.vo.res.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,22 @@ public class BoardController {
 
 
     @GetMapping("/getBoards")
-    public List<BoardVO> getBoards() {
-        return boardService.getBoards(null, null, null, null, null);
+    public BoardData getBasicBoards(Integer currentPage) {
+        return boardService.getBoards(currentPage, null, null, null, null);
+    }
+
+    @GetMapping("/getNotice")
+    public List<BoardVO> getNoticeBoards() {
+        return boardService.getNotice();
+    }
+
+    @GetMapping("/getBoardByBoardIdx")
+    public BoardVO getBoardByBoardIdx(Integer boardIdx) {
+        return boardService.getBoardDataByBoardIdx(boardIdx);
+    }
+
+    @GetMapping("/getFileNamesByBoardIdx")
+    public List<String> getAttachedFileNameByBoardIdx(Integer boardIdx) {
+        return boardService.getAttachedFileNameByBoardIdx(boardIdx);
     }
 }

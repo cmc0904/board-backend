@@ -19,11 +19,25 @@ public interface BoardRepository {
 
     // 게시판 글 목록 가져오기
     List<BoardVO> getBoards(
-            Integer currentPage
+            Integer offset
             , String searchType
             , LocalDateTime startDate
             , LocalDateTime endDate
     );
-
+    
+    // 게시판 총 갯수
+    Integer getBoardCount(
+            String searchType
+            , LocalDateTime startDate
+            , LocalDateTime endDate
+    );
+    
+    // 공지사항 불러오기
     List<BoardVO> getNotice();
+    
+    // 게시판 번호로 게시판 정보 불러오기
+    BoardVO getBoardDataByBoardIdx(Integer boardIdx);
+    
+    // 게시판 번호로 첨부파일 이름 불러오기
+    List<String> getAttachedFileNameByBoardIdx(Integer boardIdx);
 }

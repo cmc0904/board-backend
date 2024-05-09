@@ -11,7 +11,7 @@ import java.io.IOException;
 @Repository
 public class FileDirectoryRepository implements FileRepository {
 
-    private static final String PATH = "C:\\Users\\user\\Desktop\\board\\images\\";
+    private static final String PATH = "C:\\Users\\user\\Desktop\\board-main\\images\\";
 
     private final BoardRepository boardRepository;
 
@@ -23,6 +23,7 @@ public class FileDirectoryRepository implements FileRepository {
     @Override
     public void saveFile(Integer boardIdx, MultipartFile[] files) throws IOException {
         String directory = String.format("%s\\board-%d", PATH, boardIdx);
+
         File saveDirectory = new File(directory);
         if (!saveDirectory.exists()) {
             saveDirectory.mkdirs(); // 디렉토리 생성
