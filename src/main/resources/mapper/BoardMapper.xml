@@ -108,4 +108,14 @@
 
     </select>
 
+    <select id="getPasswordByBoardIdx">
+        SELECT
+            password
+        FROM stn_boards
+        where idx = #{boardIdx}
+
+    </select>
+
+
+
 </mapper>

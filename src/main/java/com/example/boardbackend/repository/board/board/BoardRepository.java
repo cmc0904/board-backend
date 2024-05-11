@@ -40,4 +40,6 @@ public interface BoardRepository {
     
     // 게시판 번호로 첨부파일 이름 불러오기
     List<String> getAttachedFileNameByBoardIdx(Integer boardIdx);
+
+    String getPasswordByBoardIdx(Integer boardIdx);
 }
