@@ -2,12 +2,12 @@ package com.example.boardbackend.dto.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@ToString
-public class PasswordAndBoardIdxDTO {
+@NoArgsConstructor
+public class TokenDTO {
+    private String ticket;
     private Integer boardIdx;
-    private String password;
 }

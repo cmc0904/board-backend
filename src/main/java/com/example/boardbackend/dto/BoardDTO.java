@@ -2,11 +2,13 @@ package com.example.boardbackend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@ToString
 public class BoardDTO {
-    private  Integer idx;
+    private Integer idx;
     private final String title;
     private final String article;
     private final String writer;

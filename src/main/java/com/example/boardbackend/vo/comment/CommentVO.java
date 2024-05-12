@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class CommentVO {
-    private Long idx;
-    private Long boardIdx;
+    private Integer idx;
+    private Integer boardIdx;
     private String content;
     private String createAt;
 }

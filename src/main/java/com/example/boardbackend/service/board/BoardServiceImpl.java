@@ -1,6 +1,7 @@
 package com.example.boardbackend.service.board;
 
 import com.example.boardbackend.dto.BoardDTO;
+import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.repository.board.board.BoardRepository;
 import com.example.boardbackend.repository.file.FileRepository;
 import com.example.boardbackend.vo.board.BoardData;
@@ -43,6 +44,23 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public ResponseResult editBoard(BoardDTO boardDTO) {
+        try {
+            System.out.println(boardDTO);
+            boardRepository.updateBoard(boardDTO);
+            /*
+            if(boardDTO.getFiles() != null) {
+                fileRepository.saveFile(boardDTO.getIdx(), boardDTO.getFiles());
+            }
+            */
+            return new ResponseResult("EDIT_SUCCESSFUL");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseResult("EDIT_FAILED");
+        }
+    }
+
+    @Override
     public List<BoardVO> getNotice() {
         try {
             return boardRepository.getNotice();
@@ -55,7 +73,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardData getBoards(Integer currentPage, String searchType, String searchContent, LocalDateTime startDate, LocalDateTime endDate) {
         try {
-            return new BoardData(boardRepository.getBoardCount(searchType, startDate, endDate), boardRepository.getBoards((currentPage - 1) * 5, searchContent, startDate, endDate));
+            return new BoardData(boardRepository.getBoardCount(searchType, startDate, endDate), boardRepository.getBoards((currentPage - 1) * 10, searchContent, startDate, endDate));
         }  catch (Exception e) {
             e.printStackTrace();
             return new BoardData(0, new ArrayList<>());
@@ -73,5 +91,21 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.getAttachedFileNameByBoardIdx(boardIdx);
     }
 
+    @Override
+    public ResponseResult deleteBoard(PasswordAndBoardIdxDTO passwordAndBoardIdxDTO) {
+        String password = boardRepository.getPasswordByBoardIdx(passwordAndBoardIdxDTO.getBoardIdx());
+
+        if(password.equals(passwordAndBoardIdxDTO.getPassword())) {
+            try {
+                boardRepository.deleteBoard(passwordAndBoardIdxDTO.getBoardIdx());
+                return new ResponseResult("BOARD_DELETED");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseResult("FAILED_DELETE_BOARD");
+            }
+        } else {
+            return new ResponseResult("PASSWORD_WRONG");
+        }
+    }
 
 }

@@ -12,6 +12,9 @@ import java.util.List;
 public interface BoardRepository {
     // 게시판 글 등록
     void insertBoard(BoardDTO boardDTO);
+
+    // 게시판 글 등록
+    void updateBoard(BoardDTO boardDTO);
     
     // 파일 이름 저장
     void insertFileName(Integer boardIdx, String fileName);
@@ -40,6 +43,10 @@ public interface BoardRepository {
     
     // 게시판 번호로 첨부파일 이름 불러오기
     List<String> getAttachedFileNameByBoardIdx(Integer boardIdx);
-
+    
+    // 게시판 비빌번호 가지오기
     String getPasswordByBoardIdx(Integer boardIdx);
+
+    // 게시판 PK 로 삭제
+    void deleteBoard(Integer boardIdx);
 }

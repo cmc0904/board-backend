@@ -1,6 +1,7 @@
 package com.example.boardbackend.controller;
 
 import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
+import com.example.boardbackend.dto.security.TokenDTO;
 import com.example.boardbackend.repository.board.board.BoardRepository;
 import com.example.boardbackend.vo.res.ResponseResult;
 import com.example.boardbackend.vo.token.Token;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin
@@ -28,8 +30,18 @@ public class SecurityController {
     }
 
     @PostMapping("/validateReadPermissionToken")
-    public ResponseResult readPermissionChecker(String token) {
-        return null;
+    public ResponseResult readPermissionChecker(@RequestBody TokenDTO token) {
+        Token tk = decryptToken(token.getTicket());
+
+        if(tk == null) {
+            return new ResponseResult("TOKEN_WRONG");
+        }
+
+        if(Objects.equals(token.getBoardIdx(), tk.getAllowedBoardIdx())) {
+            return new ResponseResult("TOKEN_GOOD");
+        }
+
+        return new ResponseResult("TOKEN_WRONG");
     }
 
 
@@ -57,9 +69,24 @@ public class SecurityController {
             byte[] encryptedData = cipher.doFinal(dataToEncrypt.getBytes());
             return Base64.getEncoder().encodeToString(encryptedData);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
+    
+    // 복호하
+    private Token decryptToken(String encryptedToken) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(AES_KEY.getBytes(), "AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 
+            byte[] decodedBytes = Base64.getDecoder().decode(encryptedToken);
+            byte[] decryptedBytes = cipher.doFinal(decodedBytes);
+            String decryptedString = new String(decryptedBytes);
+
+            return gson.fromJson(decryptedString, Token.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

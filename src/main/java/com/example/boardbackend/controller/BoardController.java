@@ -1,6 +1,7 @@
 package com.example.boardbackend.controller;
 
 import com.example.boardbackend.dto.BoardDTO;
+import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.service.board.BoardService;
 import com.example.boardbackend.vo.board.BoardData;
 import com.example.boardbackend.vo.board.BoardVO;
@@ -37,6 +38,22 @@ public class BoardController {
                 new BoardDTO(title, article, writer, password, email, isNotice, isPrivate, files)
         );
     }
+    @PutMapping("/editBoard")
+    public ResponseResult edit(
+            @RequestParam(value = "idx") Integer idx,
+            @RequestParam(value = "title") String title
+            , @RequestParam(value = "article") String article
+            , @RequestParam(value = "writer") String writer
+            , @RequestParam(value = "password") String password
+            , @RequestParam(value = "email") String email
+            , @RequestParam(value = "isNotice") Integer isNotice
+            , @RequestParam(value = "isPrivate") Integer isPrivate
+            , @RequestParam(value = "files", required = false)  MultipartFile[] files
+    ) {
+        return boardService.editBoard(
+                new BoardDTO(idx, title, article, writer, password, email, isNotice, isPrivate, files)
+        );
+    }
 
 
     @GetMapping("/getBoards")
@@ -57,5 +74,11 @@ public class BoardController {
     @GetMapping("/getFileNamesByBoardIdx")
     public List<String> getAttachedFileNameByBoardIdx(Integer boardIdx) {
         return boardService.getAttachedFileNameByBoardIdx(boardIdx);
+    }
+
+    @DeleteMapping("/deleteBoard")
+    public ResponseResult deleteBoard(@RequestBody PasswordAndBoardIdxDTO passwordAndBoardIdxDTO) {
+        System.out.println(passwordAndBoardIdxDTO);
+        return boardService.deleteBoard(passwordAndBoardIdxDTO);
     }
 }

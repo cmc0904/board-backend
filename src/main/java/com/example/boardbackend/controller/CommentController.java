@@ -1,6 +1,8 @@
 package com.example.boardbackend.controller;
 
 import com.example.boardbackend.dto.CommentDTO;
+import com.example.boardbackend.dto.CommentEditDTO;
+import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.service.comment.CommentService;
 import com.example.boardbackend.vo.comment.CommentVO;
 import com.example.boardbackend.vo.res.ResponseResult;
@@ -29,4 +31,14 @@ public class CommentController {
     public List<CommentVO> getCommentByBoardIdx(Integer boardIdx) {
         return commentService.getCommentByBoardIdx(boardIdx);
     }
+
+    @PutMapping("/updateComment")
+    public ResponseResult updateComment(@RequestBody CommentEditDTO commentEditDTO) {
+        return commentService.editComment(commentEditDTO);
+    }
+    @DeleteMapping("/deleteComment")
+    public ResponseResult deleteComment(@RequestBody PasswordAndBoardIdxDTO passwordAndBoardIdxDTO) {
+        return commentService.deleteComment(passwordAndBoardIdxDTO);
+    }
+
 }

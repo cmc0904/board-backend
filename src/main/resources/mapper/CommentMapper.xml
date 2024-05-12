@@ -35,4 +35,24 @@
             createAt desc
     </select>
 
+    <select id="getCommentPasswordByCommentIdx">
+        select
+            password
+        from
+            stn_comments
+        where
+            idx = #{commentIdx}
+    </select>
+
+    <update id="updateComment">
+        update stn_comments set content = #{content} where idx = #{commentIdx}
+    </update>
+
+    <delete id="deleteCommentByCommentIdx">
+        delete
+        from stn_comments
+        where idx = #{commentIdx};
+    </delete>
+
+
 </mapper>

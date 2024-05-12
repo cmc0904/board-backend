@@ -113,8 +113,26 @@
             password
         FROM stn_boards
         where idx = #{boardIdx}
-
     </select>
+
+    <delete id="deleteBoard">
+        delete from stn_boards where idx = #{boardIdx}
+    </delete>
+
+
+    <update id="updateBoard">
+        update stn_boards set
+            title = #{title}
+            , article = #{article}
+            , writer = #{writer}
+            , password = #{email}
+            , email = #{email}
+            , isNotice = #{isNotice}
+            , isPrivate = #{isPrivate}
+        where
+            idx = #{idx}
+    </update>
+
 
 
 
