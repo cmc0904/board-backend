@@ -24,15 +24,17 @@ public interface BoardRepository {
     List<BoardVO> getBoards(
             Integer offset
             , String searchType
-            , LocalDateTime startDate
-            , LocalDateTime endDate
+            , String content
+            , String startDate
+            , String endDate
     );
     
     // 게시판 총 갯수
     Integer getBoardCount(
             String searchType
-            , LocalDateTime startDate
-            , LocalDateTime endDate
+            , String content
+            , String startDate
+            , String endDate
     );
     
     // 공지사항 불러오기
@@ -49,4 +51,7 @@ public interface BoardRepository {
 
     // 게시판 PK 로 삭제
     void deleteBoard(Integer boardIdx);
+
+    // 게시판 조회수 증가
+    void updateBoardViewCount(Integer boardIdx);
 }

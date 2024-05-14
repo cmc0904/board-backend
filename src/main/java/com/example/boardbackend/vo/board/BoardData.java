@@ -11,5 +11,6 @@ import java.util.List;
 @Getter
 public class BoardData {
     private Integer count;
+    private String type;
     private List<BoardVO> boardData;
 }

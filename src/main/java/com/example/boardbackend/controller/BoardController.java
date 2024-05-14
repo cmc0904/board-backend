@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -57,8 +58,10 @@ public class BoardController {
 
 
     @GetMapping("/getBoards")
-    public BoardData getBasicBoards(Integer currentPage) {
-        return boardService.getBoards(currentPage, null, null, null, null);
+    public BoardData getBasicBoards(Integer currentPage, String searchType, String content, String startDate, String endDate) {
+        System.out.println(searchType);
+        System.out.println(content);
+        return boardService.getBoards(currentPage, searchType, content, startDate, endDate);
     }
 
     @GetMapping("/getNotice")
@@ -78,7 +81,16 @@ public class BoardController {
 
     @DeleteMapping("/deleteBoard")
     public ResponseResult deleteBoard(@RequestBody PasswordAndBoardIdxDTO passwordAndBoardIdxDTO) {
-        System.out.println(passwordAndBoardIdxDTO);
         return boardService.deleteBoard(passwordAndBoardIdxDTO);
+    }
+
+    @GetMapping("/fileDownload")
+    public byte[] fileDownloader(Integer boardIdx, String fileName) {
+        return boardService.getFileByteArray(boardIdx, fileName);
+    }
+
+    @PutMapping("/readBoard")
+    public ResponseResult fileDownloader(Integer boardIdx) {
+        return boardService.readBoard(boardIdx);
     }
 }

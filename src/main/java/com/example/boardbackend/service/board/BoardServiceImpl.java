@@ -48,6 +48,7 @@ public class BoardServiceImpl implements BoardService {
         try {
             System.out.println(boardDTO);
             boardRepository.updateBoard(boardDTO);
+
             /*
             if(boardDTO.getFiles() != null) {
                 fileRepository.saveFile(boardDTO.getIdx(), boardDTO.getFiles());
@@ -71,12 +72,21 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardData getBoards(Integer currentPage, String searchType, String searchContent, LocalDateTime startDate, LocalDateTime endDate) {
+    public BoardData getBoards(Integer currentPage, String searchType, String searchContent, String startDate, String endDate) {
         try {
-            return new BoardData(boardRepository.getBoardCount(searchType, startDate, endDate), boardRepository.getBoards((currentPage - 1) * 10, searchContent, startDate, endDate));
+            if(!searchType.equals("DATE_ONLY") && !searchType.equals("ALL_DATA")) {
+                if(searchContent != null) {
+                    if(searchContent.isBlank()) {
+                        return new BoardData(0, searchType, new ArrayList<>());
+
+                    }
+                }
+            }
+
+            return new BoardData(boardRepository.getBoardCount(searchType, searchContent, startDate != null ? startDate + " 00:00:00" : null, endDate != null ? endDate + " 23:59:59" : null), searchType, boardRepository.getBoards((currentPage - 1) * 10, searchType, searchContent, startDate != null ? startDate + " 00:00:00" : null, endDate != null ? endDate + " 23:59:59" : null));
         }  catch (Exception e) {
             e.printStackTrace();
-            return new BoardData(0, new ArrayList<>());
+            return new BoardData(0, "ERROR", new ArrayList<>());
         }
 
     }
@@ -106,6 +116,26 @@ public class BoardServiceImpl implements BoardService {
         } else {
             return new ResponseResult("PASSWORD_WRONG");
         }
+    }
+
+    @Override
+    public byte[] getFileByteArray(Integer boardIdx, String fileName) {
+        try {
+            return fileRepository.getFileByte(boardIdx, fileName);
+        } catch (Exception e) {
+            return new byte[0];
+        }
+    }
+
+    @Override
+    public ResponseResult readBoard(Integer boardIdx) {
+        try {
+            boardRepository.updateBoardViewCount(boardIdx);
+            return new ResponseResult("BOARD_READED");
+        } catch (Exception e) {
+            return new ResponseResult("BOARD_READ_FAIL");
+        }
+
     }
 
 }

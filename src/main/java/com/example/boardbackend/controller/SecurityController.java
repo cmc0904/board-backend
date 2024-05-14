@@ -3,6 +3,7 @@ package com.example.boardbackend.controller;
 import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.dto.security.TokenDTO;
 import com.example.boardbackend.repository.board.board.BoardRepository;
+import com.example.boardbackend.vo.board.BoardVO;
 import com.example.boardbackend.vo.res.ResponseResult;
 import com.example.boardbackend.vo.token.Token;
 import com.google.gson.Gson;
@@ -31,6 +32,12 @@ public class SecurityController {
 
     @PostMapping("/validateReadPermissionToken")
     public ResponseResult readPermissionChecker(@RequestBody TokenDTO token) {
+        BoardVO boardVO = boardRepository.getBoardDataByBoardIdx(token.getBoardIdx());
+
+        if(boardVO.getIsPrivate() == 0) {
+            return new ResponseResult("TOKEN_GOOD");
+        }
+
         Token tk = decryptToken(token.getTicket());
 
         if(tk == null) {

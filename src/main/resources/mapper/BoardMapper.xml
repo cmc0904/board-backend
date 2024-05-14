@@ -18,17 +18,17 @@
     <select id="getBoards">
         SELECT
             board.idx AS boardIdx,
-            board.title AS boardTitle,
+            board.title as boardTitle,
             board.article AS boardArticle,
             board.email AS boardWriterEmail,
-            COUNT(files.fileName) AS fileCount,
+            COUNT(DISTINCT files.idx) AS fileCount,
             board.writer AS writer,
             board.createAt,
             board.isNotice AS isNotice,
             board.isPrivate AS isPrivate,
             IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
-            COUNT(comments.boardIdx) AS commentCount,
-            0 AS boardView
+            COUNT(DISTINCT comments.idx) AS commentCount,
+            board.boardView AS boardView
         FROM
             stn_boards board
                 LEFT JOIN
@@ -37,6 +37,23 @@
             stn_comments comments ON board.idx = comments.boardIdx
         WHERE
             board.isNotice = 0
+
+            <if test='"TITLE".equals(searchType)'>
+                AND board.title like CONCAT('%',#{content},'%')
+            </if>
+
+            <if test='"TITLE_CONTENT".equals(searchType)'>
+                AND (board.article like CONCAT('%',#{content},'%')
+                OR board.article like CONCAT('%',#{content},'%'))
+            </if>
+
+            <if test='"WRITER".equals(searchType)'>
+                AND board.writer like CONCAT('%',#{content},'%')
+            </if>
+
+            <if test='startDate != null and endDate != null'>
+                AND board.createAt between #{startDate} and #{endDate}
+            </if>
         GROUP BY
             board.idx
         ORDER BY
@@ -49,6 +66,22 @@
             count(board.idx)
         FROM stn_boards board
         where isNotice = 0
+        <if test='"TITLE".equals(searchType)'>
+            AND board.title like CONCAT('%',#{content},'%')
+        </if>
+
+        <if test='"TITLE_CONTENT".equals(searchType)'>
+            AND (board.article like CONCAT('%',#{content},'%')
+            OR board.article like CONCAT('%',#{content},'%'))
+        </if>
+
+        <if test='"WRITER".equals(searchType)'>
+            AND board.writer like CONCAT('%',#{content},'%')
+        </if>
+
+        <if test='startDate != null and endDate != null'>
+            AND board.createAt between #{startDate} and #{endDate}
+        </if>
     </select>
 
 
@@ -58,14 +91,14 @@
             board.title AS boardTitle,
             board.article AS boardArticle,
             board.email AS boardWriterEmail,
-            COUNT(files.fileName) AS fileCount,
+            COUNT(distinct files.idx) AS fileCount,
             board.writer AS writer,
             board.createAt,
             board.isNotice AS isNotice,
             board.isPrivate AS isPrivate,
             IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
-            COUNT(comments.boardIdx) AS commentCount,
-            0 AS boardView
+            COUNT(comments.idx) AS commentCount,
+            board.boardView AS boardView
         FROM
             stn_boards board
                 LEFT JOIN
@@ -102,7 +135,7 @@
             board.isPrivate AS isPrivate,
             IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
             0 AS commentCount,
-            0 AS boardView
+            board.boardView AS boardView
         FROM stn_boards board
         where idx = #{boardIdx}
 
@@ -131,6 +164,13 @@
             , isPrivate = #{isPrivate}
         where
             idx = #{idx}
+    </update>
+
+    <update id="updateBoardViewCount">
+        update stn_boards set
+            boardView = boardView + 1
+        where
+            idx = #{boardIdx}
     </update>
 
 

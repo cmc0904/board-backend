@@ -21,7 +21,7 @@ public interface BoardService {
     List<BoardVO> getNotice();
 
     // 일반 게시판 정보 가져오기
-    BoardData getBoards(Integer currentPage, String searchType, String searchContent, LocalDateTime startDate, LocalDateTime endDate);
+    BoardData getBoards(Integer currentPage, String searchType, String searchContent, String startDate, String endDate);
 
     // 게시판 번호(PK)로 게시판 정보 가져오기
     BoardVO getBoardDataByBoardIdx(Integer boardIdx);
@@ -32,7 +32,11 @@ public interface BoardService {
     // 게시판 삭제
     ResponseResult deleteBoard(PasswordAndBoardIdxDTO passwordAndBoardIdxDTO);
 
-
+    // 게시판 파일 다운로드
+    byte[] getFileByteArray(Integer boardIdx, String fileName);
+    
+    // 게시판 읽기
+    ResponseResult readBoard(Integer boardIdx);
 
 
 }

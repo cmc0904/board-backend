@@ -21,5 +21,5 @@ public class BoardVO {
     private Integer isPrivate;
     private Integer isNewBoard;
     private int commentCount;
-    private int boardView;
+    private Long boardView;
 }

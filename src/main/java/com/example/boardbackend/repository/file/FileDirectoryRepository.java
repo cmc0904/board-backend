@@ -7,11 +7,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Repository
 public class FileDirectoryRepository implements FileRepository {
 
-    private static final String PATH = "C:\\Users\\user\\Desktop\\board-main\\images\\";
+    private static final String PATH = "C:\\Users\\user\\Desktop\\board-maaain\\images\\";
 
     private final BoardRepository boardRepository;
 
@@ -33,5 +36,13 @@ public class FileDirectoryRepository implements FileRepository {
             file.transferTo(new File(directory + "\\" + file.getOriginalFilename()));
             boardRepository.insertFileName(boardIdx, file.getOriginalFilename());
         }
+    }
+
+    @Override
+    public byte[] getFileByte(Integer boardIdx, String fileName) throws IOException {
+        String directory = String.format("%s\\board-%d\\%s", PATH, boardIdx, fileName);
+        Path filePath = Paths.get(directory);
+
+        return Files.readAllBytes(filePath);
     }
 }
