@@ -54,4 +54,7 @@ public interface BoardRepository {
 
     // 게시판 조회수 증가
     void updateBoardViewCount(Integer boardIdx);
+
+    // 게시판 원글 아이디(PK) 를 통해서 답변 게시판 불러오기
+    List<BoardVO> getReplyBoardsByBoardIdx(Integer boardIdx);
 }

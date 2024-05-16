@@ -33,10 +33,11 @@ public class BoardController {
             , @RequestParam(value = "email") String email
             , @RequestParam(value = "isNotice") Integer isNotice
             , @RequestParam(value = "isPrivate") Integer isPrivate
+            , @RequestParam(value = "replyIdx" , required = false) Integer replyIdx
             , @RequestParam(value = "files", required = false)  MultipartFile[] files
     ) {
         return boardService.uploadBoard(
-                new BoardDTO(title, article, writer, password, email, isNotice, isPrivate, files)
+                new BoardDTO(title, article, writer, password, email, isNotice, isPrivate, files, replyIdx)
         );
     }
     @PutMapping("/editBoard")
@@ -52,15 +53,13 @@ public class BoardController {
             , @RequestParam(value = "files", required = false)  MultipartFile[] files
     ) {
         return boardService.editBoard(
-                new BoardDTO(idx, title, article, writer, password, email, isNotice, isPrivate, files)
+                new BoardDTO(idx, title, article, writer, password, email, isNotice, isPrivate, files, null)
         );
     }
 
 
     @GetMapping("/getBoards")
     public BoardData getBasicBoards(Integer currentPage, String searchType, String content, String startDate, String endDate) {
-        System.out.println(searchType);
-        System.out.println(content);
         return boardService.getBoards(currentPage, searchType, content, startDate, endDate);
     }
 

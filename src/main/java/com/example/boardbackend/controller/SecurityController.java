@@ -51,6 +51,21 @@ public class SecurityController {
         return new ResponseResult("TOKEN_WRONG");
     }
 
+    @PostMapping("/validateEditPermissionToken")
+    public ResponseResult editPermissionCheck(@RequestBody TokenDTO token) {
+        Token tk = decryptToken(token.getTicket());
+
+        if(tk == null) {
+            return new ResponseResult("TOKEN_WRONG");
+        }
+
+        if(Objects.equals(token.getBoardIdx(), tk.getAllowedBoardIdx())) {
+            return new ResponseResult("TOKEN_GOOD");
+        }
+
+        return new ResponseResult("TOKEN_WRONG");
+    }
+
 
     @PostMapping("/generateReadPermissionToken")
     public ResponseResult generateReadPermissionToken(@RequestBody PasswordAndBoardIdxDTO passwordAndBoardIdxDTO) {
@@ -80,7 +95,7 @@ public class SecurityController {
         }
     }
     
-    // 복호하
+    // 복호화
     private Token decryptToken(String encryptedToken) {
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");

@@ -3,11 +3,15 @@ package com.example.boardbackend.service.board;
 import com.example.boardbackend.dto.BoardDTO;
 import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.repository.board.board.BoardRepository;
+import com.example.boardbackend.repository.board.comment.CommentRepository;
 import com.example.boardbackend.repository.file.FileRepository;
 import com.example.boardbackend.vo.board.BoardData;
 import com.example.boardbackend.vo.board.BoardVO;
+import com.example.boardbackend.vo.board.DeleteErrorVO;
+import com.example.boardbackend.vo.comment.CommentVO;
 import com.example.boardbackend.vo.res.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,12 +22,15 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
+    private final CommentRepository commentRepository;
+
 
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository, FileRepository fileRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository, FileRepository fileRepository, CommentRepository commentRepository) {
         this.boardRepository = boardRepository;
         this.fileRepository = fileRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -109,6 +116,10 @@ public class BoardServiceImpl implements BoardService {
             try {
                 boardRepository.deleteBoard(passwordAndBoardIdxDTO.getBoardIdx());
                 return new ResponseResult("BOARD_DELETED");
+            } catch (DataIntegrityViolationException my) {
+                List<CommentVO> comments = commentRepository.getCommentsByBoardIdx(passwordAndBoardIdxDTO.getBoardIdx());
+                List<BoardVO> boards = boardRepository.getReplyBoardsByBoardIdx(passwordAndBoardIdxDTO.getBoardIdx());
+                return new DeleteErrorVO("DELETE_ERROR", comments.size(), boards.size());
             } catch (Exception e) {
                 e.printStackTrace();
                 return new ResponseResult("FAILED_DELETE_BOARD");

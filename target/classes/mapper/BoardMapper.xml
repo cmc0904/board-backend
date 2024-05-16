@@ -6,8 +6,8 @@
 <mapper namespace="com.example.boardbackend.repository.board.board.BoardRepository">
 
      <insert id="insertBoard" useGeneratedKeys="true" keyProperty="idx">
-            INSERT INTO stn_boards (title, article, writer, password, email, isNotice, isPrivate)
-            VALUES (#{title}, #{article}, #{writer}, #{password}, #{email}, #{isNotice}, #{isPrivate})
+            INSERT INTO stn_boards (title, article, writer, password, email, isNotice, isPrivate, replyIdx)
+            VALUES (#{title}, #{article}, #{writer}, #{password}, #{email}, #{isNotice}, #{isPrivate}, #{replyIdx})
     </insert>
 
     <insert id="insertFileName">
@@ -57,7 +57,7 @@
         GROUP BY
             board.idx
         ORDER BY
-            board.createAt DESC
+            board.replyIdx asc, board.createAt DESC
         LIMIT 10 OFFSET #{offset}
     </select>
 
@@ -172,6 +172,25 @@
         where
             idx = #{boardIdx}
     </update>
+
+    <select id="getReplyBoardsByBoardIdx">
+        SELECT
+            board.idx AS boardIdx,
+            board.title AS boardTitle,
+            board.article AS boardArticle,
+            board.email as boardWriterEmail,
+            (SELECT count(fileName) from stn_files where boardIdx = board.idx) as fileCount,
+            board.writer AS writer,
+            board.createAt,
+            board.isNotice AS isNotice,
+            board.isPrivate AS isPrivate,
+            IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
+            0 AS commentCount,
+            board.boardView AS boardView
+        FROM stn_boards board
+        where replyIdx = #{boardIdx}
+    </select>
+
 
 
 
