@@ -12,13 +12,15 @@ SELECT
 	, board.title
 	, board.article
 	, board.email
+	, (SELECT COUNT(*) FROM stn_files f WHERE board.idx = f.boardIdx) AS fileCount
 	, board.writer
 	, board.createAt
 	, board.isNotice
 	, board.isPrivate
 	, IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData
 	, boardView
+	, (SELECT COUNT(*) FROM stn_comments c WHERE board.idx = c.boardIdx) AS commentCount
 FROM
 	CommentTree board
 ORDER BY
-    COALESCE(board.replyIdx, board.idx) DESC, board.createAt DESC;
+    COALESCE(board.replyIdx, board.idx) DESC
