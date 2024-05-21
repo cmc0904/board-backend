@@ -1,26 +1,30 @@
-WITH RECURSIVE CommentTree AS (
-    SELECT idx, title, article, email, writer, createAt, isNotice, isPrivate, boardView, replyIdx, 0 AS level
+WITH RECURSIVE cte AS(
+    SELECT 1 AS lv
+         , idx
+         , title
+         , article
+         , replyIdx
+         , createAt
+         , CAST(idx AS char(99)) x
     FROM stn_boards
-    WHERE replyIdx IS NULL AND isNotice = 0
+    WHERE replyIdx IS NULL 
     UNION ALL
-    SELECT b.idx, b.title, b.article, b.email, b.writer, b.createAt, b.isNotice, b.isPrivate, b.boardView, b.replyIdx, ct.level + 1
-    FROM stn_boards b
-    INNER JOIN CommentTree ct ON b.replyIdx = ct.idx
+    SELECT b.lv + 1 AS lv
+         , p.idx
+         , p.title
+         , p.article
+         , p.replyIdx
+         , p.createAt
+         , CONCAT(b.x, '-', p.idx) x
+    FROM stn_boards p
+             INNER JOIN cte b
+                        ON p.replyIdx = b.idx
 )
+
 SELECT
-	board.idx
-	, board.title
-	, board.article
-	, board.email
-	, (SELECT COUNT(*) FROM stn_files f WHERE board.idx = f.boardIdx) AS fileCount
-	, board.writer
-	, board.createAt
-	, board.isNotice
-	, board.isPrivate
-	, IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData
-	, boardView
-	, (SELECT COUNT(*) FROM stn_comments c WHERE board.idx = c.boardIdx) AS commentCount
+	*
 FROM
-	CommentTree board
-ORDER BY
-    COALESCE(board.replyIdx, board.idx) DESC
+	cte
+ORDER BY 
+	X,
+	createAt DESC;
