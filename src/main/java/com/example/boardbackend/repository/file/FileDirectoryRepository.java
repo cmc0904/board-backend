@@ -45,4 +45,11 @@ public class FileDirectoryRepository implements FileRepository {
 
         return Files.readAllBytes(filePath);
     }
+
+    @Override
+    public void deleteFile(Integer boardIdx, String fileName) {
+        String directory = String.format("%s\\board-%d\\%s", PATH, boardIdx, fileName);
+        File file = new File(directory);
+        file.delete();
+    }
 }

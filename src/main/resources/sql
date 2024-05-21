@@ -7,7 +7,7 @@ WITH RECURSIVE cte AS(
          , createAt
          , CAST(idx AS char(99)) x
     FROM stn_boards
-    WHERE replyIdx IS NULL 
+    WHERE replyIdx IS NULL
     UNION ALL
     SELECT b.lv + 1 AS lv
          , p.idx
@@ -25,6 +25,6 @@ SELECT
 	*
 FROM
 	cte
-ORDER BY 
+ORDER BY
 	X,
 	createAt DESC;

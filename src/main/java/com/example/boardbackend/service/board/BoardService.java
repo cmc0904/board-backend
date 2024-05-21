@@ -1,6 +1,7 @@
 package com.example.boardbackend.service.board;
 
 import com.example.boardbackend.dto.BoardDTO;
+import com.example.boardbackend.dto.BoardEditDTO;
 import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.vo.board.BoardData;
 import com.example.boardbackend.vo.board.BoardVO;
@@ -15,7 +16,7 @@ public interface BoardService {
     ResponseResult uploadBoard(BoardDTO boardDTO);
 
     // 게시판 글 수정
-    ResponseResult editBoard(BoardDTO boardDTO);
+    ResponseResult editBoard(BoardEditDTO boardDTO);
 
     // 공지사항 가져오기
     List<BoardVO> getNotice();

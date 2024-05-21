@@ -191,8 +191,9 @@
         where replyIdx = #{boardIdx}
     </select>
 
-
-
+    <delete id="deleteAttachedFileNameByBoardIdx">
+        delete from stn_files where boardIdx = #{boardIdx} and fileName = #{fileName}
+    </delete>
 
 
 </mapper>

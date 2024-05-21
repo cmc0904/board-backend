@@ -1,6 +1,7 @@
 package com.example.boardbackend.service.board;
 
 import com.example.boardbackend.dto.BoardDTO;
+import com.example.boardbackend.dto.BoardEditDTO;
 import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.repository.board.board.BoardRepository;
 import com.example.boardbackend.repository.board.comment.CommentRepository;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -51,16 +54,35 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public ResponseResult editBoard(BoardDTO boardDTO) {
+    public ResponseResult editBoard(BoardEditDTO boardDTO) {
         try {
             System.out.println(boardDTO);
             boardRepository.updateBoard(boardDTO);
 
-            /*
+            List<String> files = boardRepository.getAttachedFileNameByBoardIdx(boardDTO.getIdx());
+            String[] beforeFiles = boardDTO.getBeforeFiles();
+
+            if(files != null && beforeFiles != null) {
+                if(files.size() != beforeFiles.length) {
+                    Set<String> difference = new HashSet<>(files);
+                    difference.addAll(List.of(beforeFiles));
+
+                    Set<String> intersection = new HashSet<>(files);
+                    intersection.retainAll(List.of(beforeFiles));
+
+                    difference.removeAll(intersection);
+
+                    for(String fileName : difference) {
+                        boardRepository.deleteAttachedFileNameByBoardIdx(boardDTO.getIdx(), fileName);
+                        fileRepository.deleteFile(boardDTO.getIdx(), fileName);
+                    }
+
+                }
+            }
+
             if(boardDTO.getFiles() != null) {
                 fileRepository.saveFile(boardDTO.getIdx(), boardDTO.getFiles());
             }
-            */
             return new ResponseResult("EDIT_SUCCESSFUL");
         } catch (Exception e) {
             e.printStackTrace();

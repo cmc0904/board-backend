@@ -9,4 +9,5 @@ public interface FileRepository {
     void saveFile(Integer boardIdx, MultipartFile[] multipartFiles) throws IOException;
 
     byte[] getFileByte(Integer boardIdx, String fileName) throws IOException;
+    void deleteFile(Integer boardIdx, String fileName);
 }

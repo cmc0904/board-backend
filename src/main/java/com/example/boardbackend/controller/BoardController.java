@@ -1,6 +1,7 @@
 package com.example.boardbackend.controller;
 
 import com.example.boardbackend.dto.BoardDTO;
+import com.example.boardbackend.dto.BoardEditDTO;
 import com.example.boardbackend.dto.security.PasswordAndBoardIdxDTO;
 import com.example.boardbackend.service.board.BoardService;
 import com.example.boardbackend.vo.board.BoardData;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -50,10 +52,12 @@ public class BoardController {
             , @RequestParam(value = "email") String email
             , @RequestParam(value = "isNotice") Integer isNotice
             , @RequestParam(value = "isPrivate") Integer isPrivate
+            , @RequestParam(value = "beforeFiles", required = false) String[] beforeFiles
             , @RequestParam(value = "files", required = false)  MultipartFile[] files
     ) {
+
         return boardService.editBoard(
-                new BoardDTO(idx, title, article, writer, password, email, isNotice, isPrivate, files, null)
+                new BoardEditDTO(idx, title, article, writer, password, email, isNotice, isPrivate, files, beforeFiles)
         );
     }
 

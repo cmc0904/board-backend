@@ -1,6 +1,7 @@
 package com.example.boardbackend.repository.board.board;
 
 import com.example.boardbackend.dto.BoardDTO;
+import com.example.boardbackend.dto.BoardEditDTO;
 import com.example.boardbackend.vo.board.BoardVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,7 +15,7 @@ public interface BoardRepository {
     void insertBoard(BoardDTO boardDTO);
 
     // 게시판 글 등록
-    void updateBoard(BoardDTO boardDTO);
+    void updateBoard(BoardEditDTO boardDTO);
     
     // 파일 이름 저장
     void insertFileName(Integer boardIdx, String fileName);
@@ -45,6 +46,8 @@ public interface BoardRepository {
     
     // 게시판 번호로 첨부파일 이름 불러오기
     List<String> getAttachedFileNameByBoardIdx(Integer boardIdx);
+    // 게시판 번호와, 파일 이름으로 디렉터리에서 파일 삭제
+    void deleteAttachedFileNameByBoardIdx(Integer boardIdx, String fileName);
     
     // 게시판 비빌번호 가지오기
     String getPasswordByBoardIdx(Integer boardIdx);
