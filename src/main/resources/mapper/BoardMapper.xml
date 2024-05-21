@@ -43,7 +43,7 @@
             </if>
 
             <if test='"TITLE_CONTENT".equals(searchType)'>
-                AND (board.article like CONCAT('%',#{content},'%')
+                AND (board.title like CONCAT('%',#{content},'%')
                 OR board.article like CONCAT('%',#{content},'%'))
             </if>
 
@@ -71,7 +71,7 @@
         </if>
 
         <if test='"TITLE_CONTENT".equals(searchType)'>
-            AND (board.article like CONCAT('%',#{content},'%')
+            AND (board.title like CONCAT('%',#{content},'%')
             OR board.article like CONCAT('%',#{content},'%'))
         </if>
 
