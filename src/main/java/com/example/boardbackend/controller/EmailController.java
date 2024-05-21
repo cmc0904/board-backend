@@ -6,6 +6,9 @@ import com.example.boardbackend.vo.res.ResponseResult;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -20,8 +23,13 @@ public class EmailController {
     }
 
     @PostMapping("/sendMail")
-    public ResponseResult sendEmail(@RequestBody Email email)  {
-        System.out.println(email);
-        return emailService.sendEmail(email);
+    public ResponseResult sendEmail(@RequestParam(value = "from") String from,
+                                    @RequestParam(value = "to") String to,
+                                    @RequestParam(value = "title") String title,
+                                    @RequestParam(value = "content") String content,
+                                    @RequestParam(value = "files", required = false) MultipartFile[] files)  {
+
+        return emailService.sendEmail(new Email(from, to, title, content, files));
+
     }
 }

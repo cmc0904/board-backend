@@ -103,6 +103,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardData getBoards(Integer currentPage, String searchType, String searchContent, String startDate, String endDate) {
         try {
+            System.out.println((currentPage - 1) * 10);
             if(!searchType.equals("DATE_ONLY") && !searchType.equals("ALL_DATA")) {
                 if(searchContent != null) {
                     if(searchContent.isBlank()) {
@@ -112,7 +113,22 @@ public class BoardServiceImpl implements BoardService {
                 }
             }
 
-            return new BoardData(boardRepository.getBoardCount(searchType, searchContent, startDate != null ? startDate + " 00:00:00" : null, endDate != null ? endDate + " 23:59:59" : null), searchType, boardRepository.getBoards((currentPage - 1) * 10, searchType, searchContent, startDate != null ? startDate + " 00:00:00" : null, endDate != null ? endDate + " 23:59:59" : null));
+            return new BoardData(
+                boardRepository.getBoardCount(
+                        searchType
+                        , searchContent
+                        , startDate != null ? startDate + " 00:00:00" : null
+                        , endDate != null ? endDate + " 23:59:59" : null
+                )
+                , searchType
+                , boardRepository.getBoards(
+                        (currentPage - 1) * 10
+                        , searchType
+                        , searchContent
+                        , startDate != null ? startDate + " 00:00:00" : null
+                        , endDate != null ? endDate + " 23:59:59" : null
+                )
+            );
         }  catch (Exception e) {
             e.printStackTrace();
             return new BoardData(0, "ERROR", new ArrayList<>());

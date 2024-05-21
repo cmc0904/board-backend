@@ -64,13 +64,6 @@ public class BoardController {
 
     @GetMapping("/getBoards")
     public BoardData getBasicBoards(Integer currentPage, String searchType, String content, String startDate, String endDate) {
-        System.out.println("==========================");
-        System.out.println(searchType);
-        System.out.println(content);
-        System.out.println(startDate);
-        System.out.println(endDate);
-        System.out.println(currentPage);
-        System.out.println("==========================");
         return boardService.getBoards(currentPage, searchType, content, startDate, endDate);
     }
 

@@ -22,4 +22,5 @@ public class BoardVO {
     private Integer isNewBoard;
     private int commentCount;
     private Long boardView;
+    private Integer depth;
 }
