@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 @Repository
 public class FileDirectoryRepository implements FileRepository {
 
-    private static final String PATH = "C:\\Users\\user\\Desktop\\board-maaain\\images\\";
+    private static final String PATH = "/home/ubuntu/board-backend/images/";
 
     private final BoardRepository boardRepository;
 

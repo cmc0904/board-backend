@@ -71,7 +71,7 @@ public class SecurityController {
     public ResponseResult generateReadPermissionToken(@RequestBody PasswordAndBoardIdxDTO passwordAndBoardIdxDTO) {
         String password = boardRepository.getPasswordByBoardIdx(passwordAndBoardIdxDTO.getBoardIdx());
         Integer parentBoardIdx = boardRepository.getBoardDataByBoardIdx(passwordAndBoardIdxDTO.getBoardIdx()).getReplyId();
-        if (password.equals(passwordAndBoardIdxDTO.getPassword()) || password.equals(boardRepository.getPasswordByBoardIdx(parentBoardIdx))) {
+        if (password.equals(passwordAndBoardIdxDTO.getPassword()) || passwordAndBoardIdxDTO.getPassword().equals(boardRepository.getPasswordByBoardIdx(parentBoardIdx))) {
             String token = generateToken(new Token(passwordAndBoardIdxDTO.getBoardIdx(), false));
             return new ResponseResult(token);
         }  else {
