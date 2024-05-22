@@ -23,4 +23,5 @@ public class BoardVO {
     private int commentCount;
     private Long boardView;
     private Integer depth;
+    private Integer replyId;
 }

@@ -61,7 +61,8 @@
             IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewBoard,
             COUNT(DISTINCT comments.idx) AS commentCount,
             board.boardView,
-            board.lv AS depth
+            board.lv AS depth,
+            board.replyIdx
         FROM
             cte board
                 LEFT JOIN stn_files files ON board.idx = files.boardIdx
@@ -95,7 +96,8 @@
             board.isPrivate,
             board.boardView,
             board.lv,
-            board.X
+            board.X,
+            board.replyIdx
         ORDER BY board.X
 
         LIMIT 10 OFFSET #{offset}
@@ -139,7 +141,8 @@
             IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
             COUNT(comments.idx) AS commentCount,
             board.boardView AS boardView,
-            1 as depth
+            1 as depth,
+            board.replyIdx
         FROM
             stn_boards board
                 LEFT JOIN
@@ -177,7 +180,8 @@
             IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
             0 AS commentCount,
             board.boardView AS boardView,
-            1 as depth
+            1 as depth,
+            board.replyIdx
         FROM stn_boards board
         where idx = #{boardIdx}
 
@@ -229,7 +233,8 @@
             IF(DATE_FORMAT(board.createAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'), 1, 0) AS isNewData,
             0 AS commentCount,
             board.boardView AS boardView,
-            1 as depth
+            1 as depth,
+            board.replyIdx
         FROM stn_boards board
         where replyIdx = #{boardIdx}
     </select>

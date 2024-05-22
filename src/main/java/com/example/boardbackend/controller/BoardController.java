@@ -38,6 +38,7 @@ public class BoardController {
             , @RequestParam(value = "replyIdx" , required = false) Integer replyIdx
             , @RequestParam(value = "files", required = false)  MultipartFile[] files
     ) {
+
         return boardService.uploadBoard(
                 new BoardDTO(title, article, writer, password, email, isNotice, isPrivate, files, replyIdx)
         );

@@ -18,19 +18,6 @@ public class BoardDTO {
     private final MultipartFile[] files;
     private final Integer replyIdx;
 
-    public BoardDTO(Integer idx, String title, String article, String writer, String password, String email, Integer isNotice, Integer isPrivate, MultipartFile[] files, Integer replyIdx) {
-        this.idx = idx;
-        this.title = title;
-        this.article = article;
-        this.writer = writer;
-        this.password = password;
-        this.email = email;
-        this.isNotice = isNotice;
-        this.isPrivate = isPrivate;
-        this.files = files;
-        this.replyIdx = replyIdx;
-    }
-
     public BoardDTO(String title, String article, String writer, String password, String email, Integer isNotice, Integer isPrivate, MultipartFile[] files, Integer replyIdx) {
         this.title = title;
         this.article = article;

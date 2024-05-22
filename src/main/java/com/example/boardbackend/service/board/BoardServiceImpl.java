@@ -103,7 +103,6 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardData getBoards(Integer currentPage, String searchType, String searchContent, String startDate, String endDate) {
         try {
-            System.out.println((currentPage - 1) * 10);
             if(!searchType.equals("DATE_ONLY") && !searchType.equals("ALL_DATA")) {
                 if(searchContent != null) {
                     if(searchContent.isBlank()) {

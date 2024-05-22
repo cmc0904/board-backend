@@ -70,11 +70,11 @@ public class SecurityController {
     @PostMapping("/generateReadPermissionToken")
     public ResponseResult generateReadPermissionToken(@RequestBody PasswordAndBoardIdxDTO passwordAndBoardIdxDTO) {
         String password = boardRepository.getPasswordByBoardIdx(passwordAndBoardIdxDTO.getBoardIdx());
-
-        if (password.equals(passwordAndBoardIdxDTO.getPassword())) {
+        Integer parentBoardIdx = boardRepository.getBoardDataByBoardIdx(passwordAndBoardIdxDTO.getBoardIdx()).getReplyId();
+        if (password.equals(passwordAndBoardIdxDTO.getPassword()) || password.equals(boardRepository.getPasswordByBoardIdx(parentBoardIdx))) {
             String token = generateToken(new Token(passwordAndBoardIdxDTO.getBoardIdx(), false));
             return new ResponseResult(token);
-        } else {
+        }  else {
             return new ResponseResult("PASSWORD_WRONG");
         }
     }
